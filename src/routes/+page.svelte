@@ -1,51 +1,68 @@
 <script lang="ts">
-	import { board, reset, word, pos } from '$lib/state';
-	import { onMount } from 'svelte';
+	import { board, reset, word, pos, state } from '$lib/state';
+	import HighContrastButton from '$lib/HighContrastButton.svelte';
+	import BackButton from '$lib/BackButton.svelte';
+	import { highContrast } from '$lib/settings';
+	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { input, guess, back } from '$lib/game';
 	import { fly } from 'svelte/transition';
 	import { toast } from 'svelte-sonner';
+	import GuessGraph from '$lib/GuessGraph.svelte';
 
 	let wrapper;
+	let listenerAdded = false;
 
 	onMount(() => {
 		if ($word === '') {
-			reset(); // Assuming reset is a function you've defined elsewhere
+			reset();
 		}
 
-		if (browser) {
-			window.removeEventListener('keydown', input);
-			window.addEventListener('keydown', (event) => {
-				if ('qwertyuiopasdfghjklzxcvbnm'.split('').includes(event.key)) {
-					input(event.key);
-				} else if (['Backspace', 'Delete'].includes(event.key)) {
-					back();
-				} else if (event.key == 'Enter') {
-					const response = guess();
+		if (!listenerAdded && browser) {
+			window.addEventListener('keydown', handleInput);
+		}
+	});
 
-					console.log(response);
+	async function handleInput(event) {
+		if ('qwertyuiopasdfghjklzxcvbnm'.split('').includes(event.key)) {
+			input(event.key);
+		} else if (['Backspace', 'Delete'].includes(event.key)) {
+			back();
+		} else if (event.key == 'Enter') {
+			const response = await guess();
 
-					if (response) {
-						toast(response);
-						for (let i = 0; i < 5; i++) {
-							const selector = `#id-${$pos[0]}-${i}`;
-							console.log(selector);
-							const element = wrapper.querySelector(selector);
-							element.classList.add('shake');
-							setTimeout(() => {
-								element.classList.remove('shake');
-							}, 500); // Duration of the shake animation
-						}
-					}
-				} else {
-					console.log('PRESSED: ', event.key);
+			console.log(response, typeof response);
+
+			if (response) {
+				toast(response);
+				for (let i = 0; i < 5; i++) {
+					const selector = `#id-${$pos[0]}-${i}`;
+					console.log(selector);
+					const element = wrapper.querySelector(selector);
+					element.classList.add('shake');
+					setTimeout(() => {
+						element.classList.remove('shake');
+					}, 500);
 				}
-			});
+			}
+		} else {
+			console.log('PRESSED: ', event.key);
+		}
+		listenerAdded = true;
+	}
+
+	onDestroy(() => {
+		if (listenerAdded && browser) {
+			window.removeEventListener('keydown', handleInput);
 		}
 	});
 </script>
 
 <div bind:this={wrapper} class="prose prose-invert mx-auto">
+	<div class="absolute left-3 mt-3">
+		<BackButton class="pr-3" />
+		<HighContrastButton />
+	</div>
 	<br />
 	<div class="mx-auto grid w-9/12 grid-cols-5">
 		{#each $board as row, rowIndex}
@@ -53,9 +70,11 @@
 				<div
 					id={`id-${rowIndex}-${columnIndex}`}
 					class="m-1 flex aspect-square justify-center
-        rounded-xl border border-bg1 text-center align-middle text-4xl"
+        rounded-xl border border-bg1 text-center align-middle text-4xl transition-all"
 					class:bg-green={piece[1] == 'correct'}
 					class:bg-yellow={piece[1] == 'present'}
+					class:bg-bg1={piece[1] == 'wrong'}
+					class:!bg-blue={piece[1] == 'present' && $highContrast == true}
 				>
 					{#if piece[0] !== ''}
 						<span transition:fly={{ y: 30 }} class="my-auto font-mono font-bold leading-4">
@@ -71,12 +90,47 @@
 	<div class=" mx-auto w-[80%]">
 		<button on:click={reset} class="btn w-full">Reset</button>
 	</div>
-
-	<pre class="mb-3">{$word}
-{$pos}</pre>
 </div>
 
 <div class="shake h-0 w-0"></div>
+
+{#if $state === 'won'}
+	<div
+		class="absolute left-0 top-0 z-10 flex h-screen w-screen justify-center border bg-bg/10 align-middle drop-shadow-2xl backdrop-blur"
+	>
+		<div
+			in:fly={{ y: 100 }}
+			out:fly={{ y: 100 }}
+			class="prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
+		>
+			<h1>You win!</h1>
+
+			<GuessGraph />
+
+			<br />
+
+			<button class="btn w-full" on:click={reset}>Play again</button>
+		</div>
+	</div>
+{/if}
+{#if $state === 'lost'}
+	<div
+		class="absolute left-0 top-0 z-10 flex h-screen w-screen justify-center border bg-bg/10 align-middle drop-shadow-2xl backdrop-blur"
+	>
+		<div
+			in:fly={{ y: 100 }}
+			out:fly={{ y: 100 }}
+			class="prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
+		>
+			<h1>You lost.</h1>
+
+			The word was {$word.toLowerCase()}.
+
+			<br /><br />
+			<button class="btn w-full" on:click={reset}>Play again</button>
+		</div>
+	</div>
+{/if}
 
 <style>
 	.shake {
