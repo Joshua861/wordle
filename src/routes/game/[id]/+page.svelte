@@ -8,7 +8,7 @@
 	let board = decodeBoard(id);
 </script>
 
-<div class="prose prose-invert mx-auto mt-5">
+<div class="prose prose-invert mx-auto mt-5 p-5">
 	<a href="/" class="font-mono text-xl font-bold underline-offset-4">Back</a>
 	<div class="mx-auto grid w-9/12 grid-cols-5">
 		{#each board as row, rowIndex}
