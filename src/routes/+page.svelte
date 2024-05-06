@@ -92,16 +92,15 @@
 	</div>
 
 	<br />
-	<div class=" mx-auto flex w-[80%] flex-col gap-2">
+	<div class=" mx-auto mb-2 flex w-[80%] flex-col gap-2">
 		<button on:click={reset} class="btn w-full">Reset</button>
-		<button class="btn w-full" on:click={toggleKeyboard}>
-			{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button
-		>
+		<!-- <button class="btn w-full" on:click={toggleKeyboard}> -->
+		<!-- 	{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button -->
+		<!-- > -->
 	</div>
 
 	{#if $keyboard}
 		<div transition:fly={{ y: 100 }}>
-			<br />
 			<Keyboard {handleGuess} />
 		</div>
 	{/if}
