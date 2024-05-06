@@ -65,13 +65,13 @@
 	}
 </script>
 
-<div bind:this={wrapper} class="prose prose-invert mx-auto">
+<div bind:this={wrapper} class="prose prose-invert mx-auto p-3">
 	<div class="mb-0 ml-3 mt-3">
 		<!-- <BackButton /> -->
 		<HighContrastButton />
 	</div>
 	<br />
-	<div class="mx-auto grid w-9/12 grid-cols-5">
+	<div class="mx-auto grid w-11/12 grid-cols-5 sm:w-9/12">
 		{#each $board as row, rowIndex}
 			{#each row as piece, columnIndex}
 				<div
@@ -98,8 +98,9 @@
 		<Keyboard {handleGuess} />
 	</div>
 	<!-- {/if} -->
-	<div class=" mx-auto mt-2 flex w-[80%] flex-col gap-2">
+	<div class=" mx-auto mt-2 flex gap-2 sm:w-[80%]">
 		<button on:click={reset} class="btn w-full">Reset</button>
+		<button on:click={() => state.set('lost')} class="btn w-full">I give up</button>
 		<!-- <button class="btn w-full" on:click={toggleKeyboard}> -->
 		<!-- 	{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button -->
 		<!-- > -->
