@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { board, reset, word, pos, state } from '$lib/state';
-	import type { Piece, Row, Board } from '$lib/state';
 	import HighContrastButton from '$lib/HighContrastButton.svelte';
-	import BackButton from '$lib/BackButton.svelte';
-	import { highContrast, keyboard, toggleKeyboard } from '$lib/settings';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { input, guess, back } from '$lib/game';
@@ -12,6 +9,8 @@
 	import GuessGraph from '$lib/GuessGraph.svelte';
 	import Keyboard from '$lib/Keyboard.svelte';
 	import Share from '$lib/Share.svelte';
+	import Board from '$lib/Board.svelte';
+	import { X } from 'lucide-svelte';
 
 	let wrapper;
 	let listenerAdded = false;
@@ -52,15 +51,6 @@
 
 		if (response) {
 			toast(response);
-			for (let i = 0; i < 5; i++) {
-				const selector = `#id-${$pos[0]}-${i}`;
-				console.log(selector);
-				const element = wrapper.querySelector(selector);
-				element.classList.add('shake');
-				setTimeout(() => {
-					element.classList.remove('shake');
-				}, 500);
-			}
 		}
 	}
 </script>
@@ -71,27 +61,8 @@
 		<HighContrastButton />
 	</div>
 	<br />
-	<div class="mx-auto grid w-11/12 grid-cols-5 sm:w-9/12">
-		{#each $board as row, rowIndex}
-			{#each row as piece, columnIndex}
-				<div
-					id={`id-${rowIndex}-${columnIndex}`}
-					class="m-1 flex aspect-square justify-center
-        rounded-xl border border-bg1 text-center align-middle text-4xl transition-all"
-					class:bg-green={piece.state == 'correct'}
-					class:bg-yellow={piece.state == 'present'}
-					class:bg-bg1={piece.state == 'wrong'}
-					class:!bg-blue={piece.state == 'present' && $highContrast == true}
-				>
-					{#if piece.letter !== null}
-						<span transition:fly={{ y: 30 }} class="my-auto font-mono font-bold leading-4">
-							{piece.letter}
-						</span>
-					{/if}
-				</div>
-			{/each}
-		{/each}
-	</div>
+
+	<Board board={$board} />
 
 	<!-- {#if $keyboard} -->
 	<div transition:fly={{ y: 100 }}>
@@ -116,8 +87,14 @@
 		<div
 			in:fly={{ y: 100 }}
 			out:fly={{ y: 100 }}
-			class="prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
+			class="max-w-11/12 prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
 		>
+			<div class="w-full text-right text-fg1/50">
+				<button on:click={() => state.set('playing')}>
+					<X />
+				</button>
+			</div>
+
 			<h1>You win!</h1>
 
 			<GuessGraph />
@@ -148,45 +125,3 @@
 		</div>
 	</div>
 {/if}
-
-<style>
-	.shake {
-		animation: shake 0.5s;
-	}
-
-	@keyframes shake {
-		0% {
-			transform: translate(1px, 1px) rotate(0deg);
-		}
-		10% {
-			transform: translate(-1px, -2px) rotate(-1deg);
-		}
-		20% {
-			transform: translate(-3px, 0px) rotate(1deg);
-		}
-		30% {
-			transform: translate(3px, 2px) rotate(0deg);
-		}
-		40% {
-			transform: translate(1px, -1px) rotate(1deg);
-		}
-		50% {
-			transform: translate(-1px, 2px) rotate(-1deg);
-		}
-		60% {
-			transform: translate(-3px, 1px) rotate(0deg);
-		}
-		70% {
-			transform: translate(3px, 1px) rotate(-1deg);
-		}
-		80% {
-			transform: translate(-1px, -1px) rotate(1deg);
-		}
-		90% {
-			transform: translate(1px, 2px) rotate(0deg);
-		}
-		100% {
-			transform: translate(1px, -2px) rotate(-1deg);
-		}
-	}
-</style>
