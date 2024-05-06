@@ -64,8 +64,8 @@
 </script>
 
 <div bind:this={wrapper} class="prose prose-invert mx-auto">
-	<div class="ml-3 mt-3">
-		<BackButton />
+	<div class="mb-0 ml-3 mt-3">
+		<!-- <BackButton /> -->
 		<HighContrastButton />
 	</div>
 	<br />

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { CornerDownLeft, Delete } from 'lucide-svelte';
 	import { back, guess, input } from './game';
 	import { highContrast } from './settings';
 	import { letters } from './state';
@@ -27,8 +28,15 @@
 	}
 </script>
 
-{#each keys as row}
+{#each keys as row, rowIndex}
 	<div class="flex">
+		{#if rowIndex === 2}
+			<button
+				on:click={handleGuess}
+				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
+				><CornerDownLeft /></button
+			>
+		{/if}
 		{#each row as key}
 			<button
 				class="m-1 flex-1 rounded border border-bg1 py-2 {buttonStyles[key]}"
@@ -37,9 +45,13 @@
 				{key}
 			</button>
 		{/each}
+		{#if rowIndex === 2}
+			<button
+				on:click={back}
+				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
+			>
+				<Delete />
+			</button>
+		{/if}
 	</div>
 {/each}
-<div class="flex">
-	<button on:click={handleGuess} class="m-1 flex-1 rounded border border-bg1 py-2">Enter</button>
-	<button on:click={back} class="m-1 flex-1 rounded border border-bg1 py-2">Delete</button>
-</div>
