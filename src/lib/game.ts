@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import { board, pos, state, word, history } from './state';
+import { board, pos, state, word, history, letters as letterStore } from './state';
 
 export function input(letter: string) {
 	const boardSnap = get(board);
@@ -55,22 +55,36 @@ export async function guess(): Promise<string | null> {
 	}
 
 	let perfectLetters = 0;
+	let letterSnap = get(letterStore);
+
 	for (let i = 0; i < row.length; i++) {
 		const letter = row[i];
 		if (letters[i] === letter[0]) {
 			console.log('Letter: ', letter[0], ' in right place!');
 			boardSnap[y][i] = [letter[0], 'correct'];
+			if (!letterSnap.includes(letter[0])) {
+				letterSnap.push([letter[0], 'correct']);
+			}
 			perfectLetters += 1;
 		} else if (letters.includes(letter[0])) {
 			console.log('Letter: ', letter[0], ' somewhere in word.');
 			boardSnap[y][i] = [letter[0], 'present'];
+
+			if (!letterSnap.includes(letter[0])) {
+				letterSnap.push([letter[0], 'present']);
+			}
 		} else {
 			console.log('Letter: ', letter[0], ' not in word.');
 			boardSnap[y][i] = [letter[0], 'wrong'];
+
+			if (!letterSnap.includes(letter[0])) {
+				letterSnap.push([letter[0], 'wrong']);
+			}
 		}
 	}
 
 	board.set(boardSnap);
+	letterStore.set(letterSnap);
 
 	if (perfectLetters == 5) {
 		state.set('won');

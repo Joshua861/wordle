@@ -2,13 +2,14 @@
 	import { board, reset, word, pos, state } from '$lib/state';
 	import HighContrastButton from '$lib/HighContrastButton.svelte';
 	import BackButton from '$lib/BackButton.svelte';
-	import { highContrast } from '$lib/settings';
+	import { highContrast, keyboard, toggleKeyboard } from '$lib/settings';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { input, guess, back } from '$lib/game';
 	import { fly } from 'svelte/transition';
 	import { toast } from 'svelte-sonner';
 	import GuessGraph from '$lib/GuessGraph.svelte';
+	import Keyboard from '$lib/Keyboard.svelte';
 
 	let wrapper;
 	let listenerAdded = false;
@@ -29,22 +30,7 @@
 		} else if (['Backspace', 'Delete'].includes(event.key)) {
 			back();
 		} else if (event.key == 'Enter') {
-			const response = await guess();
-
-			console.log(response, typeof response);
-
-			if (response) {
-				toast(response);
-				for (let i = 0; i < 5; i++) {
-					const selector = `#id-${$pos[0]}-${i}`;
-					console.log(selector);
-					const element = wrapper.querySelector(selector);
-					element.classList.add('shake');
-					setTimeout(() => {
-						element.classList.remove('shake');
-					}, 500);
-				}
-			}
+			handleGuess();
 		} else {
 			console.log('PRESSED: ', event.key);
 		}
@@ -56,11 +42,30 @@
 			window.removeEventListener('keydown', handleInput);
 		}
 	});
+
+	async function handleGuess() {
+		const response = await guess();
+
+		console.log(response, typeof response);
+
+		if (response) {
+			toast(response);
+			for (let i = 0; i < 5; i++) {
+				const selector = `#id-${$pos[0]}-${i}`;
+				console.log(selector);
+				const element = wrapper.querySelector(selector);
+				element.classList.add('shake');
+				setTimeout(() => {
+					element.classList.remove('shake');
+				}, 500);
+			}
+		}
+	}
 </script>
 
 <div bind:this={wrapper} class="prose prose-invert mx-auto">
-	<div class="absolute left-3 mt-3">
-		<BackButton class="pr-3" />
+	<div class="ml-3 mt-3">
+		<BackButton />
 		<HighContrastButton />
 	</div>
 	<br />
@@ -87,9 +92,19 @@
 	</div>
 
 	<br />
-	<div class=" mx-auto w-[80%]">
+	<div class=" mx-auto flex w-[80%] flex-col gap-2">
 		<button on:click={reset} class="btn w-full">Reset</button>
+		<button class="btn w-full" on:click={toggleKeyboard}>
+			{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button
+		>
 	</div>
+
+	{#if $keyboard}
+		<div transition:fly={{ y: 100 }}>
+			<br />
+			<Keyboard {handleGuess} />
+		</div>
+	{/if}
 </div>
 
 <div class="shake h-0 w-0"></div>

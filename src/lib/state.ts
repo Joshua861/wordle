@@ -6,6 +6,7 @@ export const word = persisted('word', '');
 export const pos = persisted('position', [0, 0]);
 export const state = persisted('state', 'playing');
 export const history = persisted('history', []);
+export const letters = persisted('letters', []);
 
 export async function reset() {
 	// shit code
@@ -55,6 +56,7 @@ export async function reset() {
 	]);
 	pos.set([0, 0]);
 	state.set('playing');
+	letters.set([]);
 
 	if (!get(history)) {
 		history.set([]);
