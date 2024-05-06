@@ -14,8 +14,15 @@
 	$: {
 		buttonStyles = {};
 		$letters.forEach(([key, status]) => {
-			buttonStyles[key.toLowerCase()] =
-				status === 'correct' ? 'bg-green' : status === 'present' ? 'bg-yellow' : 'bg-bg1'; // Default to 'bg-bg1' if not present or correct
+			const style =
+				status === 'correct'
+					? 'bg-green'
+					: status === 'wrong'
+						? 'bg-bg1'
+						: $highContrast
+							? 'bg-blue'
+							: 'bg-yellow';
+			buttonStyles[key.toLowerCase()] = style;
 		});
 	}
 </script>
