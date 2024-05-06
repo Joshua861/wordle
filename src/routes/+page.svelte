@@ -11,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 	import GuessGraph from '$lib/GuessGraph.svelte';
 	import Keyboard from '$lib/Keyboard.svelte';
+	import Share from '$lib/Share.svelte';
 
 	let wrapper;
 	let listenerAdded = false;
@@ -120,7 +121,9 @@
 
 			<GuessGraph />
 
-			<br />
+			<div class="my-3">
+				<Share />
+			</div>
 
 			<button class="btn w-full" on:click={reset}>Play again</button>
 		</div>
