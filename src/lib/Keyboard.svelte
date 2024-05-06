@@ -2,29 +2,28 @@
 	import { CornerDownLeft, Delete } from 'lucide-svelte';
 	import { back, guess, input } from './game';
 	import { highContrast } from './settings';
-	import { letters } from './state';
+	import { letters as letterStore } from './state';
 
 	let keys = ['qwertyuiop'.split(''), 'asdfghjkl'.split(''), 'zxcvbnm'.split('')];
+	let letters;
 
 	export let handleGuess;
 
-	// Initialize the array mapping keys to styles
-	let buttonStyles = {};
+	letterStore.subscribe((data) => {
+		letters = data;
+		console.log(letters);
+	});
 
-	// Reactive statement to update buttonStyles whenever $letters changes
-	$: {
-		buttonStyles = {};
-		$letters.forEach(([key, status]) => {
-			const style =
-				status === 'correct'
-					? 'bg-green'
-					: status === 'wrong'
-						? 'bg-bg1'
-						: $highContrast
-							? 'bg-blue'
-							: 'bg-yellow';
-			buttonStyles[key.toLowerCase()] = style;
-		});
+	function getStyle(state, hc) {
+		return state === 'correct'
+			? 'bg-green'
+			: state === 'wrong'
+				? 'bg-bg1'
+				: state !== 'present'
+					? 'bg-bg'
+					: hc
+						? 'bg-blue'
+						: 'bg-yellow';
 	}
 </script>
 
@@ -32,14 +31,18 @@
 	<div class="flex">
 		{#if rowIndex === 2}
 			<button
-				on:click={handleGuess}
+				on:click={back}
 				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
-				><CornerDownLeft /></button
 			>
+				<Delete />
+			</button>
 		{/if}
 		{#each row as key}
 			<button
-				class="m-1 flex-1 rounded border border-bg1 py-2 {buttonStyles[key]}"
+				class="m-1 flex-1 rounded border border-bg1 py-2 transition-all {getStyle(
+					letters[key.toUpperCase()],
+					$highContrast
+				)}"
 				on:click={() => input(key)}
 			>
 				{key}
@@ -47,11 +50,10 @@
 		{/each}
 		{#if rowIndex === 2}
 			<button
-				on:click={back}
+				on:click={handleGuess}
 				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
+				><CornerDownLeft /></button
 			>
-				<Delete />
-			</button>
 		{/if}
 	</div>
 {/each}

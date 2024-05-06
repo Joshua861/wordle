@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { board, reset, word, pos, state } from '$lib/state';
+	import type { Piece, Row, Board } from '$lib/state';
 	import HighContrastButton from '$lib/HighContrastButton.svelte';
 	import BackButton from '$lib/BackButton.svelte';
 	import { highContrast, keyboard, toggleKeyboard } from '$lib/settings';
@@ -76,14 +77,14 @@
 					id={`id-${rowIndex}-${columnIndex}`}
 					class="m-1 flex aspect-square justify-center
         rounded-xl border border-bg1 text-center align-middle text-4xl transition-all"
-					class:bg-green={piece[1] == 'correct'}
-					class:bg-yellow={piece[1] == 'present'}
-					class:bg-bg1={piece[1] == 'wrong'}
-					class:!bg-blue={piece[1] == 'present' && $highContrast == true}
+					class:bg-green={piece.state == 'correct'}
+					class:bg-yellow={piece.state == 'present'}
+					class:bg-bg1={piece.state == 'wrong'}
+					class:!bg-blue={piece.state == 'present' && $highContrast == true}
 				>
-					{#if piece[0] !== ''}
+					{#if piece.letter !== null}
 						<span transition:fly={{ y: 30 }} class="my-auto font-mono font-bold leading-4">
-							{piece[0]}
+							{piece.letter}
 						</span>
 					{/if}
 				</div>
