@@ -91,19 +91,17 @@
 		{/each}
 	</div>
 
-	<br />
-	<div class=" mx-auto mb-2 flex w-[80%] flex-col gap-2">
+	<!-- {#if $keyboard} -->
+	<div transition:fly={{ y: 100 }}>
+		<Keyboard {handleGuess} />
+	</div>
+	<!-- {/if} -->
+	<div class=" mx-auto mt-2 flex w-[80%] flex-col gap-2">
 		<button on:click={reset} class="btn w-full">Reset</button>
 		<!-- <button class="btn w-full" on:click={toggleKeyboard}> -->
 		<!-- 	{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button -->
 		<!-- > -->
 	</div>
-
-	{#if $keyboard}
-		<div transition:fly={{ y: 100 }}>
-			<Keyboard {handleGuess} />
-		</div>
-	{/if}
 </div>
 
 <div class="shake h-0 w-0"></div>
