@@ -30,6 +30,7 @@
 			return;
 		} else if (usernameInput.length > 9) {
 			toast.error('Username too long (max 9 characters).');
+			return;
 		}
 		username.set(usernameInput);
 		showUsername = !showUsername;
