@@ -7,6 +7,7 @@ export const pos: Writable<Position> = persisted('position', { x: 0, y: 0 });
 export const state = persisted('state', 'playing');
 export const history = persisted('history', []);
 export const letters = persisted('letters', {});
+export const challenge: Writable<Challenge> = persisted('challenge', null);
 
 export type Piece = {
 	letter: string | null;
@@ -19,20 +20,32 @@ export type Position = {
 	x: number;
 	y: number;
 };
+type Challenge = null | {
+	username: string;
+	guesses: number;
+};
 
-export async function reset() {
-	// shit code
+export async function reset(newWord: string | null = null) {
+	console.log('RESETTING');
+
 	board.set(newBoard());
 	pos.set({ x: 0, y: 0 });
 	state.set('playing');
 	letters.set({});
+	challenge.set(null);
 
 	if (!get(history)) {
 		history.set([]);
 	}
 
-	const response = await fetch('/api/random_word');
-	word.set(await response.json());
+	if (typeof newWord === 'string') {
+		console.log('NEWWORD IS STRING');
+		word.set(newWord);
+	} else {
+		const response = await fetch('/api/random_word');
+		console.log('RESPONSE', response);
+		word.set(await response.json());
+	}
 }
 
 function newBoard(): Board {

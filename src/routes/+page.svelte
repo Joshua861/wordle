@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { board, reset, word, pos, state } from '$lib/state';
+	import { board, reset, word, state, challenge, pos } from '$lib/state';
 	import HighContrastButton from '$lib/HighContrastButton.svelte';
 	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
@@ -10,6 +10,7 @@
 	import Keyboard from '$lib/Keyboard.svelte';
 	import Share from '$lib/Share.svelte';
 	import Board from '$lib/Board.svelte';
+	import Challenge from '$lib/Challenge.svelte';
 	import { X } from 'lucide-svelte';
 
 	let wrapper;
@@ -60,7 +61,16 @@
 		<!-- <BackButton /> -->
 		<HighContrastButton />
 	</div>
-	<br />
+
+	{#if $challenge}
+		<br />
+		<h1>
+			Challenge from {$challenge.username}.
+		</h1>
+		<p>They beat this in {$challenge.guesses} guesses. Can you beat them?</p>
+	{:else}
+		<br />
+	{/if}
 
 	<Board board={$board} />
 
@@ -73,8 +83,7 @@
 		<button on:click={reset} class="btn w-full">Reset</button>
 		<button on:click={() => state.set('lost')} class="btn w-full">I give up</button>
 		<!-- <button class="btn w-full" on:click={toggleKeyboard}> -->
-		<!-- 	{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button -->
-		<!-- > -->
+		<!-- 	{$keyboard ? 'Hide keyboard' : 'Show keyboard'}</button> -->
 	</div>
 </div>
 
@@ -99,8 +108,19 @@
 
 			<GuessGraph />
 
+			{#if $challenge}
+				<p>
+					{#if $pos.y + 1 > $challenge.guesses}
+						Aww man. {$challenge.username} beat you by {$pos.y + 1 - $challenge.guesses} guesses.
+					{:else}
+						Yipee! You beat {$challenge.username}!!!
+					{/if}
+				</p>
+			{/if}
+
 			<div class="my-3">
 				<Share />
+				<Challenge />
 			</div>
 
 			<button class="btn w-full" on:click={reset}>Play again</button>
@@ -119,6 +139,10 @@
 			<h1>You lost.</h1>
 
 			The word was {$word.toLowerCase()}.
+
+			{#if $challenge}
+				It looks like {$challenge.username} beat you.
+			{/if}
 
 			<br /><br />
 			<button class="btn w-full" on:click={reset}>Play again</button>
