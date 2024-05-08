@@ -45,23 +45,24 @@
 <br />
 
 {#if showChallenge}
-	<p class="truncate rounded-lg bg-bg p-2">
-		{url}
-
-		<button class="ml-auto text-left" on:click={() => copy(url)}>
+	<div class="flex">
+		<p class="flex-1 truncate rounded-lg bg-bg p-2">
+			{url}
+		</p>
+		<button class="ml-auto pl-3 text-left" on:click={() => copy(url)}>
 			<Clipboard class="inline" />
 		</button>
-	</p>
+	</div>
 {/if}
 
 {#if showUsername}
 	<div class="my-3 flex gap-3">
 		<input
 			placeholder="Username"
-			class="ring-sky-500 rounded-lg bg-bg p-2 active:ring-4"
+			class="ring-sky-500 flex-1 rounded-lg bg-bg p-2 active:ring-4"
 			bind:value={usernameInput}
-			type="text flex-1"
+			type="text"
 		/>
-		<button on:click={submit} class="btn">Submit</button>
+		<button on:click={submit} class="btn !px-3">Submit</button>
 	</div>
 {/if}
