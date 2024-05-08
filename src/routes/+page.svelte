@@ -12,6 +12,7 @@
 	import Board from '$lib/Board.svelte';
 	import Challenge from '$lib/Challenge.svelte';
 	import { X } from 'lucide-svelte';
+	import DisableScroll from '$lib/DisableScroll.svelte';
 
 	let wrapper;
 	let listenerAdded = false;
@@ -90,14 +91,8 @@
 <div class="shake h-0 w-0"></div>
 
 {#if $state === 'won'}
-	<div
-		class="absolute left-0 top-0 z-10 flex h-screen w-screen justify-center border bg-bg/10 align-middle drop-shadow-2xl backdrop-blur"
-	>
-		<div
-			in:fly={{ y: 100 }}
-			out:fly={{ y: 100 }}
-			class="max-w-11/12 prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
-		>
+	<div class="popup-container">
+		<div in:fly={{ y: 100 }} out:fly={{ y: 100 }} class="popup">
 			<div class="w-full text-right text-fg1/50">
 				<button on:click={() => state.set('playing')}>
 					<X />
@@ -111,9 +106,16 @@
 			{#if $challenge}
 				<p>
 					{#if $pos.y + 1 > $challenge.guesses}
-						Aww man. {$challenge.username} beat you by {$pos.y + 1 - $challenge.guesses} guesses.
+						Aww man. {$challenge.username} beat you by {$pos.y + 1 - $challenge.guesses}
+						guess{$challenge.guesses - ($pos.y + 1) !== -1 ? 'es' : ''}.
+					{:else if $pos.y + 1 < $challenge.guesses}
+						Yipee! You beat {$challenge.username} by {$challenge.guesses - ($pos.y + 1)} guess{$challenge.guesses -
+							($pos.y + 1) !==
+						1
+							? 'es'
+							: ''}!!!
 					{:else}
-						Yipee! You beat {$challenge.username}!!!
+						Tidy. You drew with {$challenge.username}.
 					{/if}
 				</p>
 			{/if}
@@ -128,14 +130,8 @@
 	</div>
 {/if}
 {#if $state === 'lost'}
-	<div
-		class="absolute left-0 top-0 z-10 flex h-screen w-screen justify-center border bg-bg/10 align-middle drop-shadow-2xl backdrop-blur"
-	>
-		<div
-			in:fly={{ y: 100 }}
-			out:fly={{ y: 100 }}
-			class="prose prose-invert my-auto h-fit w-fit rounded-xl bg-bg1 p-10"
-		>
+	<div class="popup-container">
+		<div in:fly={{ y: 100 }} out:fly={{ y: 100 }} class="popup">
 			<h1>You lost.</h1>
 
 			The word was {$word.toLowerCase()}.

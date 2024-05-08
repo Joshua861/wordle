@@ -20,14 +20,13 @@
 <br />
 
 {#if showShare}
-	<br />
-	<p class="mt-1 inline w-max text-wrap rounded-lg bg-bg p-2">
-		{url.substring(0, 30)}...
+	<div class="flex h-fit">
+		<p class="flex-1 truncate rounded-lg bg-bg p-2">
+			{url}
+		</p>
 
-		<button on:click={() => copy(url)}>
+		<button class="inline aspect-square bg-bg1 pl-2" on:click={() => copy(url)}>
 			<Clipboard class="inline" />
 		</button>
-	</p>
-
-	<br /><br />
+	</div>
 {/if}

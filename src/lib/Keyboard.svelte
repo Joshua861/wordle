@@ -30,28 +30,20 @@
 {#each keys as row, rowIndex}
 	<div class="flex">
 		{#if rowIndex === 2}
-			<button
-				on:click={back}
-				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
-			>
+			<button on:click={back} class="key flex flex-1 justify-center align-middle">
 				<Delete />
 			</button>
 		{/if}
 		{#each row as key}
 			<button
-				class="m-1 flex-1 rounded border border-bg1 py-2 transition-all {getStyle(
-					letters[key.toUpperCase()],
-					$highContrast
-				)}"
+				class="key {getStyle(letters[key.toUpperCase()], $highContrast)}"
 				on:click={() => input(key)}
 			>
 				{key}
 			</button>
 		{/each}
 		{#if rowIndex === 2}
-			<button
-				on:click={handleGuess}
-				class="m-1 flex flex-1 justify-center rounded border border-bg1 py-2 align-middle"
+			<button on:click={handleGuess} class="key flex flex-1 justify-center align-middle"
 				><CornerDownLeft /></button
 			>
 		{/if}

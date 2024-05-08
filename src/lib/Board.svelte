@@ -10,8 +10,8 @@
 		{#each row as piece, columnIndex}
 			<div
 				id={`id-${rowIndex}-${columnIndex}`}
-				class="m-1 flex aspect-square justify-center
-        rounded-xl border border-bg1 text-center align-middle text-4xl transition-all"
+				class="m-[2px] flex aspect-square justify-center rounded-xl
+        border border-bg1 text-center align-middle text-3xl transition-all sm:m-1 sm:text-4xl"
 				class:bg-green={piece.state == 'correct'}
 				class:bg-yellow={piece.state == 'present'}
 				class:bg-bg1={piece.state == 'wrong'}

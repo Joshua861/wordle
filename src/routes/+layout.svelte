@@ -5,7 +5,7 @@
 
 <slot></slot>
 
-<Toaster position="bottom-center" theme="dark" />
+<Toaster position="top-center" theme="dark" />
 
 <svelte:head>
 	<title>Definitely not Wordle</title>

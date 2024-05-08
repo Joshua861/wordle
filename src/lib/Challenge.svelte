@@ -45,11 +45,10 @@
 <br />
 
 {#if showChallenge}
-	<br />
-	<p class="inline w-max text-wrap rounded-lg bg-bg p-2">
-		{url.substring(0, 35)}...
+	<p class="truncate rounded-lg bg-bg p-2">
+		{url}
 
-		<button on:click={() => copy(url)}>
+		<button class="ml-auto text-left" on:click={() => copy(url)}>
 			<Clipboard class="inline" />
 		</button>
 	</p>

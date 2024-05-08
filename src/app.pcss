@@ -4,11 +4,25 @@
 @tailwind utilities;
 
 body {
-    @apply bg-bg
-    }
+	@apply bg-bg;
+}
 
-* {touch-action: manipulation;}
+* {
+	touch-action: manipulation;
+}
 
 .btn {
-    @apply bg-fg1  text-bg  rounded py-1 px-10 hover:bg-fg1/95 active:scale-95 transition-all
-  }
+	@apply rounded bg-fg1  px-5 py-1 text-bg transition-all hover:bg-fg1/95 active:scale-95 sm:px-10;
+}
+
+.key {
+	@apply m-[1px] flex-1 rounded border border-bg1 py-2 transition-all sm:m-1;
+}
+
+.popup {
+	@apply max-h-[100vh] overflow-scroll prose prose-invert my-auto h-fit max-w-[100vw] rounded-xl bg-bg1 p-7 drop-shadow-xl sm:max-w-[500px] sm:p-10;
+}
+
+.popup-container {
+	@apply fixed left-0 top-0 z-10 flex h-screen w-screen justify-center border bg-bg/10 align-middle backdrop-blur;
+}
