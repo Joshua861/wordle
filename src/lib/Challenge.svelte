@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { Clipboard, Swords } from 'lucide-svelte';
+	import { Swords } from 'lucide-svelte';
 	import { page } from '$app/stores';
-	import { copy, encodeChallenge } from '$lib';
+	import { encodeChallenge } from '$lib';
 	import { username } from './settings';
 	import { toast } from 'svelte-sonner';
+	import CopyButton from './CopyButton.svelte';
 
 	let showChallenge: boolean = false;
 	let showUsername: boolean = false;
@@ -49,9 +50,10 @@
 		<p class="flex-1 truncate rounded-lg bg-bg p-2">
 			{url}
 		</p>
-		<button class="ml-auto pl-3 text-left" on:click={() => copy(url)}>
-			<Clipboard class="inline" />
-		</button>
+		<CopyButton
+			text={url}
+			shareData={{ title: 'FIGHT ME!', text: 'Can you beat my score on wordle?', url }}
+		/>
 	</div>
 {/if}
 

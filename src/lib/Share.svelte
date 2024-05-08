@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Clipboard, Share } from 'lucide-svelte';
+	import { Share } from 'lucide-svelte';
 	import { page } from '$app/stores';
-	import { encodeChallenge, copy } from '$lib';
+	import { encodeChallenge } from '$lib';
+	import CopyButton from './CopyButton.svelte';
 
 	let showShare = false;
 	let url: string;
@@ -25,8 +26,6 @@
 			{url}
 		</p>
 
-		<button class="inline aspect-square bg-bg1 pl-2" on:click={() => copy(url)}>
-			<Clipboard class="inline" />
-		</button>
+		<CopyButton text={url} shareData={{ title: 'Wordle game!', text: "Aren't I so cool?", url }} />
 	</div>
 {/if}

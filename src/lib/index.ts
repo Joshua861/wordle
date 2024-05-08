@@ -18,6 +18,17 @@ export async function copy(text) {
 	}
 }
 
+export async function share(shareData) {
+	console.log('sharing');
+	try {
+		await navigator.share(shareData);
+		toast.success('Shared!');
+	} catch (err) {
+		console.log('Failed to sahre: ', err);
+		toast.error("Failed to share. Your device probably doesn't support it.");
+	}
+}
+
 export function encodeBoard(): string {
 	const b = get(board);
 	let data = '';
