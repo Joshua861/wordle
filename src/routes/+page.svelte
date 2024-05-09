@@ -12,7 +12,6 @@
 	import Board from '$lib/Board.svelte';
 	import Challenge from '$lib/Challenge.svelte';
 	import { X } from 'lucide-svelte';
-	import DisableScroll from '$lib/DisableScroll.svelte';
 
 	let wrapper;
 	let listenerAdded = false;
