@@ -30,8 +30,11 @@
 {#each keys as row, rowIndex}
 	<div class="flex">
 		{#if rowIndex === 2}
-			<button on:click={back} class="key flex flex-1 justify-center align-middle">
-				<Delete />
+			<button
+				on:click={back}
+				class="key flex flex-1 justify-center !bg-red text-center align-middle text-bg"
+			>
+				<Delete class="my-auto" />
 			</button>
 		{/if}
 		{#each row as key}
@@ -43,8 +46,10 @@
 			</button>
 		{/each}
 		{#if rowIndex === 2}
-			<button on:click={handleGuess} class="key flex flex-1 justify-center align-middle"
-				><CornerDownLeft /></button
+			<button
+				on:click={handleGuess}
+				class="key flex flex-1 justify-center !bg-purple align-middle text-bg"
+				><CornerDownLeft class="my-auto" /></button
 			>
 		{/if}
 	</div>

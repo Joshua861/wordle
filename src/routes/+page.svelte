@@ -51,7 +51,7 @@
 		console.log(response, typeof response);
 
 		if (response) {
-			toast(response);
+			toast.error(response);
 		}
 	}
 </script>
