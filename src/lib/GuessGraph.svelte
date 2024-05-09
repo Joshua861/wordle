@@ -11,17 +11,12 @@
 	} from 'chart.js';
 	import { format } from 'date-fns';
 	import { onMount } from 'svelte';
+	import colors from './colors';
 
 	Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale);
 
 	let canvas;
 	let history;
-
-	const gruvboxDark = {
-		backgroundColor: '#3c3b37',
-		borderColor: '#928374',
-		textColor: '#ebdbb2'
-	};
 
 	historyStore.subscribe((data) => {
 		history = data;
@@ -37,8 +32,9 @@
 					{
 						label: 'Guesses',
 						data: history.map((row) => row.guesses),
-						borderColor: gruvboxDark.borderColor,
-						backgroundColor: gruvboxDark.backgroundColor
+						borderColor: colors.yellow,
+						backgroundColor: colors.bg1,
+						lineTension: 0.4
 					}
 				]
 			},
@@ -46,19 +42,22 @@
 				scales: {
 					x: {
 						ticks: {
-							color: gruvboxDark.textColor
+							color: colors.fg3
 						}
 					},
 					y: {
 						ticks: {
-							color: gruvboxDark.textColor
+							color: colors.fg3
 						}
 					}
 				},
 				plugins: {
 					legend: {
 						labels: {
-							color: gruvboxDark.textColor
+							color: colors.fg3,
+							font: {
+								family: "'JetBrains Mono', 'monospace'"
+							}
 						}
 					}
 				}
