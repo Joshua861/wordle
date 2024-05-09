@@ -3,6 +3,7 @@
 	import { page } from '$app/stores';
 	import { encodeChallenge } from '$lib';
 	import CopyButton from './CopyButton.svelte';
+	import { slide } from 'svelte/transition';
 
 	let showShare = false;
 	let url: string;
@@ -21,7 +22,7 @@
 <br />
 
 {#if showShare}
-	<div class="flex h-fit">
+	<div class="flex h-fit" transition:slide={{ axis: 'y' }}>
 		<p class="flex-1 truncate rounded-lg bg-bg p-2">
 			{url}
 		</p>

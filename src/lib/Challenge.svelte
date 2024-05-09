@@ -5,6 +5,7 @@
 	import { username } from './settings';
 	import { toast } from 'svelte-sonner';
 	import CopyButton from './CopyButton.svelte';
+	import { slide } from 'svelte/transition';
 
 	let showChallenge: boolean = false;
 	let showUsername: boolean = false;
@@ -46,7 +47,7 @@
 <br />
 
 {#if showChallenge}
-	<div class="flex">
+	<div class="flex" transition:slide={{ axis: 'y' }}>
 		<p class="flex-1 truncate rounded-lg bg-bg p-2">
 			{url}
 		</p>
