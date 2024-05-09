@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Share } from 'lucide-svelte';
 	import { page } from '$app/stores';
-	import { encodeChallenge } from '$lib';
+	import { encodeBoard } from '$lib';
 	import CopyButton from './CopyButton.svelte';
 	import { slide } from 'svelte/transition';
 
@@ -9,7 +9,7 @@
 	let url: string;
 
 	function share() {
-		const data = encodeChallenge();
+		const data = encodeBoard();
 		url = `${$page.url.protocol}//${$page.url.host}/game/${data}`;
 		showShare = !showShare;
 	}
