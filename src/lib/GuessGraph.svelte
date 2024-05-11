@@ -27,7 +27,7 @@
 		new Chart(canvas, {
 			type: 'line',
 			data: {
-				labels: history.map((row) => format(new Date(row.time), 'yy-mm-dd')),
+				labels: history.map((row) => format(new Date(row.time), 'dd MMM yy')),
 				datasets: [
 					{
 						label: 'Guesses',
